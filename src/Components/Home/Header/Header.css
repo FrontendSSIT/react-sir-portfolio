@@ -1,17 +1,16 @@
 .headers-bg{
-    margin-top: 50px;
+    margin-top: 10px;
     background:url('../../../images/1.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+    width: 100%;
 }
 .slider-banner{
-    
     padding: 200px;
 }
 .carousel-caption{
     position: unset;
 }
-
 .slider-banner button{
   margin-top: 100px;
   margin-left: 20px;
@@ -23,4 +22,16 @@
 }
 .slider-banner .slider-btn{
    margin-left: 250px;
+}
+
+@media(max-width: 468px){
+     .slider-btn{
+        margin:0px !important;
+    }
+    .slider-banner{
+        padding: 80px!important;
+    }
+    .headers-bg{
+        
+    }
 }

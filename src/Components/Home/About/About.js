@@ -12,7 +12,7 @@ export const About = () => {
         </Col>
         <Col lg={6}>
         <div>
-        <img src={aboutImg} alt=""/>
+        <img src={aboutImg} alt="" width="100%"/>
         </div>
         </Col>
        </Row>

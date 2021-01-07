@@ -1,11 +1,14 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import Carousel from 'react-bootstrap/Carousel'
+import { NavBar } from '../NavBar/NavBar'
 import './Header.css'
 export const Header = () => {
     return (
        <section className="headers-bg">
+       <NavBar/>
        <Container className="slider-banner">
+    
       <Row className="jutify-content-center">
       <Col lg={12}>
       <Carousel>
