@@ -42,10 +42,10 @@ export const Contact = () => {
 export const MainContacts = () => {
     return(
         <section className="mb-2">
-          <main id="main" style={{ backgroundColor: "aliceblue" }}>
+          <main id="main" style={{ backgroundColor: "yowllo" }}>
              <div class="breadcrumbs" data-aos="fade-in">
               <div class="container">
-                <h2>Contact Us</h2>
+                <h2>Contact</h2>
               </div>
             </div>
             <section id="contact" class="contact">

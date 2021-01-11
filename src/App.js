@@ -8,13 +8,17 @@ import {
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Home } from './Components/Home/Home/Home';
+import { Blog } from './Components/Home/Blog/Blog';
 
 function App() {
   return (
       <Router>
       <Switch>
-     <Route path="/">
+     <Route exact path="/">
      <Home/>
+     </Route> 
+     <Route path="/blog">
+     <Blog/>
      </Route> 
       </Switch>
       </Router>
