@@ -1,7 +1,13 @@
 .navbar{
     background:#45668E;
-   
+    text-align: center;   
+    z-index: 999;
 }
 .navbar-light .navbar-nav .nav-link {
     color:#fff;
+}
+a{
+    color: #fff;
+    text-decoration: none;
+    padding: 15px;
 }

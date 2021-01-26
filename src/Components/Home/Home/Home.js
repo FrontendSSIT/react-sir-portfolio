@@ -5,12 +5,14 @@ import { Header } from '../Header/Header'
 import ScrollToTop from "react-scroll-to-top";
 // import { ScrollTop } from 'react-window-scroll-top';
 import { Footer } from '../Footer/Footer';
+import { ShowBlog } from '../../ShowBlog/ShowBlog';
 export const Home = () => {
     return (
         <section>
-      
+          
             <Header/>
             <About/>/
+    
             <Contact/>
            
             <MainContacts/>

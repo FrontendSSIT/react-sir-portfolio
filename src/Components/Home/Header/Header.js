@@ -6,7 +6,7 @@ import './Header.css'
 export const Header = () => {
     return (
        <section className="headers-bg">
-       <NavBar/>
+       <NavBar />
        <Container className="slider-banner">
     
       <Row className="jutify-content-center">
@@ -48,8 +48,7 @@ export const Header = () => {
     </Carousel.Caption>
   </Carousel.Item>
 </Carousel>
-<button className="slider-btn">About</button>
-<button>Contact</button>
+
       </Col>
       </Row>
        </Container>

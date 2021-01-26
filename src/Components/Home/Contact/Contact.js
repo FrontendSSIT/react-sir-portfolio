@@ -1,4 +1,5 @@
 import React from 'react'
+import emailjs from "emailjs-com";
 import { Container, Row ,Col} from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import ContactImg from '../../../images/g1.jpg'
@@ -11,6 +12,17 @@ export const Contact = () => {
     const { register, handleSubmit, errors } = useForm();
     const onSubmit = data => console.log(data);
     console.log(errors);
+    function sendEmail(e) {
+      e.preventDefault();
+  
+  emailjs.sendForm('service_x75mkjm','template1',e.target,'user_q2cm9V6MTRS2Nnfs8jSLM')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+      e.target.reset()
+  }
     return (
         <Container className="contact-form">
         <Row>
@@ -21,15 +33,16 @@ export const Contact = () => {
         </Col>
         <Col lg={6} xs={12}>
          <div className="form-section">
-         <form onSubmit={handleSubmit(onSubmit)}>
+         <form onSubmit={sendEmail}>
          <h2>FREE CONSULTATION</h2>
          <p>  Lorem ipsum dolor sit amet,Phasellus dapibus felis elit, sed accumsan arcu gravida vitae.</p>
-     <div> <input type="text" placeholder="Name" name="First name" ref={register({required: true, maxLength: 80})} /></div>
-     <div> <input type="text" placeholder="Email" name="Email" ref={register({required: true, pattern: /^\S+@\S+$/i})} /></div>
-     <div> <input type="tel" placeholder="Mobile number" name="Mobile number" ref={register({required: true, minLength: 6, maxLength: 12})} /></div>
-     <div> <textarea placeholder="Write your message"></textarea></div>
+     <div> <input type="text" placeholder="Name" name="name" ref={register({required: true, maxLength: 80})} /></div>
+     <div> <input type="text" placeholder="Email" name="email" ref={register({required: true, pattern: /^\S+@\S+$/i})} /></div>
+     <div> <input type="tel" placeholder="Mobile number" name="number" ref={register({required: true, minLength: 11,})} /></div>
+     <div> <textarea placeholder="Write your message" name="message"></textarea></div>
      <input type="submit"  style={{background:'#45668E',color:'#fff',border:'none',padding:'5px 10px',}} value="Send Your Message"/>
      </form>
+     
          </div>
         </Col>
       
@@ -40,6 +53,17 @@ export const Contact = () => {
 
 
 export const MainContacts = () => {
+  function sendEmail(e) {
+    e.preventDefault();
+
+emailjs.sendForm('service_x75mkjm','template1',e.target,'user_q2cm9V6MTRS2Nnfs8jSLM')
+    .then((result) => {
+        console.log(result.text);
+    }, (error) => {
+        console.log(error.text);
+    });
+    e.target.reset()
+}
     return(
         <section className="mb-2">
           <main id="main" style={{ backgroundColor: "yowllo" }}>
@@ -68,13 +92,13 @@ export const MainContacts = () => {
                       <div class="email">
                        
                         {/* <h4>Email:</h4> */}
-                        <p> <FontAwesomeIcon icon={faEnvelope} /> example@gmail.com</p>
+                        <p> <FontAwesomeIcon icon={faEnvelope} /> shameemsardar84@gmail.com</p>
                       </div>
   
                       <div class="phone">
                         
                         {/* <h4>Call:</h4> */}
-                        <p> <FontAwesomeIcon icon={faMobile} sellinbd/>+88</p>
+                        <p> <FontAwesomeIcon icon={faMobile} sellinbd/>+881712815441</p>
                       </div>
   
                     </div>
@@ -82,30 +106,25 @@ export const MainContacts = () => {
                   </div>
   
                   <div class="col-lg-8 mt-5 mt-lg-0 form-container">
-                    <form >
-                      <div class="form-row">
-                        <div class="col-md-6 form-group">
-                          <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                          <div class="validate"></div>
-                        </div>
-                        <div class="col-md-6 form-group">
-                          <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                          <div class="validate"></div>
-                        </div>
+                  <form onSubmit={sendEmail}>
+                  <div className="row pt-5 mx-auto">
+                      <div className="col-8 form-group mx-auto">
+                          <input type="text" className="form-control" placeholder="Name" name="name"/>
                       </div>
-                      <div class="form-group">
-                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                        <div class="validate"></div>
+                      <div className="col-8 form-group pt-2 mx-auto">
+                          <input type="email" className="form-control" placeholder="Email Address" name="email"/>
                       </div>
-                      <div class="form-group">
-                        <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                        <div class="validate"></div>
+                      <div className="col-8 form-group pt-2 mx-auto">
+                          <input type="text" className="form-control" placeholder="Subject" name="subject"/>
                       </div>
-                      <div class="mb-3">
-                        <div class="error-message"></div>
+                      <div className="col-8 form-group pt-2 mx-auto">
+                          <textarea className="form-control" id="" cols="30" rows="8" placeholder="Your message" name="message"></textarea>
                       </div>
-                      <div class="text-center"><button type="submit" style={{background:'#45668E',color:'#fff',border:'none',padding:'5px 10px',}}>Send Message</button></div>
-                    </form>
+                      <div className="col-8 pt-3 mx-auto">
+                          <input type="submit" className="btn btn-info" value="Send Message"></input>
+                      </div>
+                  </div>
+              </form>
   
                   </div>
   
