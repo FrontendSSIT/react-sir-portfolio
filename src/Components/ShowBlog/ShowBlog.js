@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Card, Col, Container, Row } from 'react-bootstrap'
 import blogImg from '../../images/t1.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment,faThumbsUp } from '@fortawesome/free-solid-svg-icons'
-
-
+import { faComment,faPaperPlane,faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import TimeAgo from 'react-timeago'
+import frenchStrings from 'react-timeago/lib/language-strings/en'
+import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
+import blogAthor from '../../images/PortfollioImg.jpg'
+import { Link } from 'react-router-dom'
 
 
 export const AllBlog=()=>{
@@ -29,7 +32,7 @@ export const AllBlog=()=>{
       <Row>
       <Col lg={12}>
        {
-         blog.map(vlog=><ShowBlog vlog={vlog}/>)
+         blog.map((vlog,index)=><ShowBlog vlog={vlog} index={index}/>)
        }
       </Col>
       </Row>
@@ -40,9 +43,64 @@ export const AllBlog=()=>{
 
 
 
-export const ShowBlog = ({vlog}) => {
-  const [comment,setComment]=useState(false)
+export const ShowBlog = ({vlog,index}) => {
+
   console.log(vlog)
+
+  const [comment,setComment]=useState(false)
+  const [commentValue,setCommentValue]=useState({})
+  const email=localStorage.getItem('email')
+  const name=localStorage.getItem('username')
+ const handleCommentValue=(e)=>{
+     const newComment={...commentValue}
+     newComment[e.target.name]=e.target.value;
+     setCommentValue(newComment)
+}
+ console.log(commentValue)
+  const handleComment=()=>{
+    const formData=new FormData()
+    formData.append("post_id",index)
+    formData.append("comment",commentValue.comment)
+    formData.append("userkey",email)
+    formData.append("username",name)
+    const url=`https://friendslink.xyz/advocateshameem.me/post/createComment.php`
+    fetch(url,{
+      method:'POST',
+      body:formData,
+       })
+       .then(res=>{
+        if(res.status===201){
+          res.json()
+          .then(result=>{
+            console.log('comment done',result,index)
+          })
+        }
+      })
+  
+    }
+
+
+const [like,setLike]=useState(false)
+const handleLike=()=>{
+  const url=`https://friendslink.xyz/advocateshameem.me/post/updateLike.php`
+  const formData=new FormData()
+  formData.append("post_id",index)
+  formData.append("userkey",email)
+  formData.append("username",name)
+  fetch(url,{
+    method:'POST',
+    body:formData,
+     })
+     .then(res=>{
+      if(res.status===200){
+        setLike(true)
+        res.json()
+        .then(result=>{
+          console.log('comment done',result,index)
+        })
+      }
+    })
+  }
     return (
         <section>
         <Container>
@@ -64,8 +122,8 @@ export const ShowBlog = ({vlog}) => {
             >
               <Card.Header>
               <div style={{display:"flex"}}>
-              <div><img src={vlog.images[0]} alt="" width="80px" height="80px" style={{borderRadius:"50%",marginRight:"10px"}}/></div>
-              <h4>Shameem Sardar</h4>
+              <div><img src={blogAthor} alt="" width="80px" height="80px" style={{borderRadius:"50%",marginRight:"10px"}}/></div>
+              <h4>Shameem Sardar </h4>
               </div>
               </Card.Header>
               <Card.Body>
@@ -75,34 +133,12 @@ export const ShowBlog = ({vlog}) => {
               </Card.Body>
             </Card>
           
-            <span><FontAwesomeIcon icon={faThumbsUp} /></span>
+            <span style={{color:`${like?"red":"#000"}`}} onClick={handleLike}>{vlog.likes} <FontAwesomeIcon icon={faThumbsUp}  /></span>
             <span onClick={()=>setComment(!comment)}><FontAwesomeIcon icon={faComment} />Comment</span>
             {
               comment?
-              <Row>
-              <Col lg={vlog.images[0]?8:12} style={{marginBottom:"50px",marginTop:"20px"}}>
-              <div>
-              <Card
-              style={{width:'100%'}}
-              className="mb-2"
-            >
-              <Card.Header>
-              <div style={{display:"flex"}}>
-              <div><img src={vlog.images[0]} alt="" width="80px" height="80px" style={{borderRadius:"50%",marginRight:"10px",}}/></div>
-              <h4>Shameem Sardar</h4>
-              </div>
-              </Card.Header>
-              <Card.Body>
-                <Card.Text>
-                 Hello
-                </Card.Text>
-              </Card.Body>
-              
-            </Card>
-              </div>
-              </Col>
-              </Row>
-              
+             
+              <Comment vlog={vlog} index={index}/>
               :null
             }
             {
@@ -110,11 +146,11 @@ export const ShowBlog = ({vlog}) => {
               <Row>
               <Col lg={vlog.images[0]?8:12}>
               <div>
-              hi
+                <textarea style={{width:"100%" ,padding:"10px"}} placeholder="comment....." name="comment" onChange={handleCommentValue}></textarea>
+               {email&&email!==undefined?<button onClick={handleComment}><FontAwesomeIcon icon={faPaperPlane} /> </button>:<Link to="/log"><button>Login</button></Link>}
               </div>
               </Col>
               </Row>
-              
               :null
             }
             </Col>
@@ -125,4 +161,65 @@ export const ShowBlog = ({vlog}) => {
         </Container>
         </section>
     )
+}
+
+
+export const Comment=({vlog,index})=>{
+  const [blogComment,setBlogComment]=useState([])
+  const formatter = buildFormatter(frenchStrings)
+  useEffect(()=>{
+    const formData=new FormData()
+    formData.append("post_id",index)
+    const url=`https://friendslink.xyz/advocateshameem.me/post/readComments.php`
+    fetch(url,{
+      method:'POST',
+      body:formData,
+    })
+    .then(res=>{
+      if(res.status===200){
+        res.json()
+        .then(result=>{
+          setBlogComment(result.records)
+        })
+      }
+    })
+  },[])
+  return(
+    <section>
+    <Container>
+     {
+       blogComment.map(comment=>{
+         console.log(comment)
+         return(
+          <Row>
+          <Col lg={vlog.images[0]?8:12} style={{marginBottom:"50px",marginTop:"20px"}}>
+          <div>
+          <Card
+          style={{width:'100%'}}
+          className="mb-2"
+        >
+          <Card.Header>
+          <div style={{display:"flex"}}>
+          <h4>{comment.username}</h4>
+          </div>
+          </Card.Header>
+          <Card.Body>
+            <Card.Text>
+             {comment.comment} 
+            </Card.Text>
+            <Card.Text>
+            <TimeAgo date={comment.date} formatter={formatter} />
+           </Card.Text>
+          </Card.Body>
+          
+        </Card>
+          </div>
+          </Col>
+          </Row>
+         )
+       })
+     }
+    </Container>
+    </section>
+  )
 }

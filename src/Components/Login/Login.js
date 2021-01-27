@@ -21,6 +21,8 @@ export const Login = () => {
 });
 
 localStorage.setItem('email',user.email)
+localStorage.setItem('username',user.name)
+
   const history = useHistory();
   const location=useLocation().location?.pathname
   if (firebase.apps.length === 0) {
