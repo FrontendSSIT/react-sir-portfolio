@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Col, Container, Row } from 'react-bootstrap'
-import blogImg from '../../images/t1.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment,faPaperPlane,faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import TimeAgo from 'react-timeago'
 import frenchStrings from 'react-timeago/lib/language-strings/en'
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
 import blogAthor from '../../images/PortfollioImg.jpg'
 import { Link } from 'react-router-dom'
-
+import { NavBar } from '../Home/NavBar/NavBar'
+import likeLogo from '../../images/Like_Outline-01.png'
+import commentLogo from '../../images/Comment-Outline-01.png'
 
 export const AllBlog=()=>{
   const [blog,setBlog]=useState([])
@@ -28,6 +29,7 @@ export const AllBlog=()=>{
 
   return(
     <section>
+    <NavBar/>
     <Container>
       <Row>
       <Col lg={12}>
@@ -45,22 +47,23 @@ export const AllBlog=()=>{
 
 export const ShowBlog = ({vlog,index}) => {
 
-  console.log(vlog)
+
 
   const [comment,setComment]=useState(false)
-  const [commentValue,setCommentValue]=useState({})
+  const [commentValue,setCommentValue]=useState('')
+
   const email=localStorage.getItem('email')
   const name=localStorage.getItem('username')
  const handleCommentValue=(e)=>{
-     const newComment={...commentValue}
-     newComment[e.target.name]=e.target.value;
+     const newComment=e.target.value;
      setCommentValue(newComment)
 }
- console.log(commentValue)
-  const handleComment=()=>{
+
+  const handleComment=(e)=>{
+    e.preventDefault();
     const formData=new FormData()
     formData.append("post_id",index)
-    formData.append("comment",commentValue.comment)
+    formData.append("comment",commentValue)
     formData.append("userkey",email)
     formData.append("username",name)
     const url=`https://friendslink.xyz/advocateshameem.me/post/createComment.php`
@@ -74,14 +77,17 @@ export const ShowBlog = ({vlog,index}) => {
           .then(result=>{
             console.log('comment done',result,index)
           })
+        
         }
+        
       })
-  
+      setCommentValue('')
     }
 
 
 const [like,setLike]=useState(false)
-const handleLike=()=>{
+const handleLike=(e)=>{
+ 
   const url=`https://friendslink.xyz/advocateshameem.me/post/updateLike.php`
   const formData=new FormData()
   formData.append("post_id",index)
@@ -100,6 +106,7 @@ const handleLike=()=>{
         })
       }
     })
+    e.preventDefault();
   }
     return (
         <section>
@@ -133,8 +140,8 @@ const handleLike=()=>{
               </Card.Body>
             </Card>
           
-            <span style={{color:`${like?"red":"#000"}`}} onClick={handleLike}>{vlog.likes} <FontAwesomeIcon icon={faThumbsUp}  /></span>
-            <span onClick={()=>setComment(!comment)}><FontAwesomeIcon icon={faComment} />Comment</span>
+            <span style={{color:`${like?"red":"#000"}`,marginRight:"10px"}} onClick={handleLike}> <img src={likeLogo} alt="" width="35px" height="35px" /></span>
+            <span onClick={()=>setComment(!comment)}> <img src={commentLogo} alt="" width="40px" height="45px" /></span>
             {
               comment?
              
@@ -145,10 +152,12 @@ const handleLike=()=>{
               comment?
               <Row>
               <Col lg={vlog.images[0]?8:12}>
-              <div>
-                <textarea style={{width:"100%" ,padding:"10px"}} placeholder="comment....." name="comment" onChange={handleCommentValue}></textarea>
-               {email&&email!==undefined?<button onClick={handleComment}><FontAwesomeIcon icon={faPaperPlane} /> </button>:<Link to="/log"><button>Login</button></Link>}
-              </div>
+             <form onSubmit={handleComment}>
+             <div>
+             <textarea style={{width:"100%" ,padding:"10px"}} placeholder="comment....." name="comment" onChange={handleCommentValue} value={commentValue}></textarea>
+            {email&&email!==undefined?<button onClick={handleComment}><FontAwesomeIcon icon={faPaperPlane} /> </button>:<Link to="/log"><button>Login</button></Link>}
+           </div>
+             </form>
               </Col>
               </Row>
               :null
@@ -168,6 +177,7 @@ export const Comment=({vlog,index})=>{
   const [blogComment,setBlogComment]=useState([])
   const formatter = buildFormatter(frenchStrings)
   useEffect(()=>{
+    setTimeout(() => {
     const formData=new FormData()
     formData.append("post_id",index)
     const url=`https://friendslink.xyz/advocateshameem.me/post/readComments.php`
@@ -183,13 +193,14 @@ export const Comment=({vlog,index})=>{
         })
       }
     })
-  },[])
+  },1000)
+  },)
   return(
     <section>
     <Container>
      {
        blogComment.map(comment=>{
-         console.log(comment)
+     
          return(
           <Row>
           <Col lg={vlog.images[0]?8:12} style={{marginBottom:"50px",marginTop:"20px"}}>

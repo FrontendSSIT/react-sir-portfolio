@@ -35,7 +35,7 @@ export const Contact = () => {
          <div className="form-section">
          <form onSubmit={sendEmail}>
          <h2>FREE CONSULTATION</h2>
-         <p>  Lorem ipsum dolor sit amet,Phasellus dapibus felis elit, sed accumsan arcu gravida vitae.</p>
+         <p>  </p>
      <div> <input type="text" placeholder="Name" name="name" ref={register({required: true, maxLength: 80})} /></div>
      <div> <input type="text" placeholder="Email" name="email" ref={register({required: true, pattern: /^\S+@\S+$/i})} /></div>
      <div> <input type="tel" placeholder="Mobile number" name="number" ref={register({required: true, minLength: 11,})} /></div>

@@ -5,6 +5,7 @@ import logo from '../../../images/logo.png'
 import './Navbar.css'
 
 export const NavBar = () => {
+  const email=localStorage.getItem("email")
     return (
         <section>
         <Container>
@@ -15,7 +16,9 @@ export const NavBar = () => {
     <Nav className="ml-auto">
       <Nav.Link ><Link to="/">Home</Link></Nav.Link>
       <Nav.Link href="#link">About</Nav.Link>
-      <Nav.Link ><Link to="/blog">Write</Link></Nav.Link>
+      {
+        email==="shameemsardar84@gmail.com"?<Nav.Link ><Link to="/blog">Write</Link></Nav.Link>:null
+      }
       <Nav.Link ><Link to="/blogShow">Article</Link></Nav.Link>
       <Nav.Link href="#link">Contact</Nav.Link>
     </Nav>
