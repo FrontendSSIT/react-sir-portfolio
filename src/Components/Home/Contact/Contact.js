@@ -13,8 +13,7 @@ export const Contact = () => {
     const onSubmit = data => console.log(data);
     console.log(errors);
     function sendEmail(e) {
-      e.preventDefault();
-  
+      e.preventDefault(); 
   emailjs.sendForm('service_x75mkjm','template1',e.target,'user_q2cm9V6MTRS2Nnfs8jSLM')
       .then((result) => {
           console.log(result.text);
@@ -42,20 +41,17 @@ export const Contact = () => {
      <div> <textarea placeholder="Write your message" name="message"></textarea></div>
      <input type="submit"  style={{background:'#45668E',color:'#fff',border:'none',padding:'5px 10px',}} value="Send Your Message"/>
      </form>
-     
          </div>
-        </Col>
-      
+        </Col>     
         </Row>
         </Container>
     )
 }
 
 
-export const MainContacts = () => {
+export const MainContacts=()=> {
   function sendEmail(e) {
     e.preventDefault();
-
 emailjs.sendForm('service_x75mkjm','template1',e.target,'user_q2cm9V6MTRS2Nnfs8jSLM')
     .then((result) => {
         console.log(result.text);
@@ -66,7 +62,7 @@ emailjs.sendForm('service_x75mkjm','template1',e.target,'user_q2cm9V6MTRS2Nnfs8j
 }
     return(
         <section className="mb-2">
-          <main id="main" style={{ backgroundColor: "yowllo" }}>
+          <main id="main" style={{ backgroundColor:"yowllo"}}>
              <div class="breadcrumbs" data-aos="fade-in">
               <div class="container">
                 <h2>Contact</h2>

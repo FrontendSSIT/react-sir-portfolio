@@ -19,8 +19,9 @@ export const NavBar = () => {
       {
         email==="shameemsardar84@gmail.com"?<Nav.Link ><Link to="/blog">Write</Link></Nav.Link>:null
       }
-      <Nav.Link ><Link to="/blogShow">Article</Link></Nav.Link>
+      {email&&email!==undefined?<Nav.Link><Link to="/blogShow">Article</Link></Nav.Link>:<Nav.Link ><Link to="/log">Article</Link></Nav.Link>}
       <Nav.Link href="#link">Contact</Nav.Link>
+      <Nav.Link ><Link to="/log">Login</Link></Nav.Link>
     </Nav>
   </Navbar.Collapse>
 </Navbar>

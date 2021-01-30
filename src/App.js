@@ -18,7 +18,6 @@ function App() {
   console.log(loginUser)
   return (
       <userContext.Provider value={[loginUser,setLoginUser]}>
-      
       <Router>
       <Switch>
      <Route exact path="/">
@@ -38,5 +37,4 @@ function App() {
       </userContext.Provider>
   );
 }
-
 export default App;

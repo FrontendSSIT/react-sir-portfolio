@@ -9,14 +9,20 @@ import blogAthor from '../../images/PortfollioImg.jpg'
 import { Link } from 'react-router-dom'
 import { NavBar } from '../Home/NavBar/NavBar'
 import likeLogo from '../../images/Like_Outline-01.png'
+import isLiked from '../../images/Like-Fill-01.png'
 import commentLogo from '../../images/Comment-Outline-01.png'
 
 export const AllBlog=()=>{
   const [blog,setBlog]=useState([])
-
+  const email=localStorage.getItem('email')
   useEffect(()=>{
+    const formData=new FormData()
+    formData.append("userkey",email)
     const url=`https://friendslink.xyz/advocateshameem.me/post/readPosts.php`
-    fetch(url)
+    fetch(url,{
+    method:'POST',
+    body:formData,
+    })
     .then(res=>{
       if(res.status===200) {
         res.json()
@@ -62,7 +68,7 @@ export const ShowBlog = ({vlog,index}) => {
   const handleComment=(e)=>{
     e.preventDefault();
     const formData=new FormData()
-    formData.append("post_id",index)
+    formData.append("post_id",vlog.post_id)
     formData.append("comment",commentValue)
     formData.append("userkey",email)
     formData.append("username",name)
@@ -75,7 +81,7 @@ export const ShowBlog = ({vlog,index}) => {
         if(res.status===201){
           res.json()
           .then(result=>{
-            console.log('comment done',result,index)
+            console.log('comment done',result,vlog.post_id)
           })
         
         }
@@ -86,11 +92,24 @@ export const ShowBlog = ({vlog,index}) => {
 
 
 const [like,setLike]=useState(false)
+const totalLike=parseInt(vlog.likes)
+const [total,setTotal]=useState(totalLike)
 const handleLike=(e)=>{
- 
+ if(vlog.is_liked=="0"){
+  const newTotal=totalLike+1;
+  setTotal(newTotal)
+   
+ }
+ else{
+
+  const newTotal=totalLike-1;
+  setTotal(newTotal)
+
+ }
+  
   const url=`https://friendslink.xyz/advocateshameem.me/post/updateLike.php`
   const formData=new FormData()
-  formData.append("post_id",index)
+  formData.append("post_id",vlog.post_id)
   formData.append("userkey",email)
   formData.append("username",name)
   fetch(url,{
@@ -99,20 +118,41 @@ const handleLike=(e)=>{
      })
      .then(res=>{
       if(res.status===200){
-        setLike(true)
         res.json()
         .then(result=>{
-          console.log('comment done',result,index)
+          console.log('comment done',result)
         })
       }
     })
-    e.preventDefault();
+  
   }
+
+const handleDelete=()=>{
+  const formData=new FormData()
+  formData.append("post_id",vlog.post_id)
+  const url=`https://friendslink.xyz/advocateshameem.me/post/deletePost.php`
+  fetch(url,{
+    method:'POST',
+    body:formData,
+  })
+  .then(res=>{
+    if(res.status===200){
+   
+      res.json()
+      .then(result=>{
+        console.log('comment done',result)
+      })
+    }
+  })
+  window.location.reload();
+}
+
     return (
         <section>
         <Container>
         <Row>
         <Col lg={12} style={{marginBottom:"30px"}}>
+       
        <div>
               <Row>
              {
@@ -123,10 +163,14 @@ const handleLike=(e)=>{
                </Col>:null
              }
               <Col lg={vlog.images[0]?8:12}>
+             
             <Card
               style={{width:'100%',height:"370px",overflow:"scroll"}}
               className="mb-2"
             >
+           {
+             email==="shameemsardar84@gmail.com"? <button onClick={handleDelete}>Delete</button>:null
+           }
               <Card.Header>
               <div style={{display:"flex"}}>
               <div><img src={blogAthor} alt="" width="80px" height="80px" style={{borderRadius:"50%",marginRight:"10px"}}/></div>
@@ -140,7 +184,9 @@ const handleLike=(e)=>{
               </Card.Body>
             </Card>
           
-            <span style={{color:`${like?"red":"#000"}`,marginRight:"10px"}} onClick={handleLike}> <img src={likeLogo} alt="" width="35px" height="35px" /></span>
+            <span style={{marginRight:"10px"}} onClick={()=>{
+              setLike(!like)
+              handleLike()}}> {total} {vlog.is_liked=="1"||like?<img src={isLiked} alt="" width="35px" height="35px" />:<img src={likeLogo} alt="" width="35px" height="35px" />} </span>
             <span onClick={()=>setComment(!comment)}> <img src={commentLogo} alt="" width="40px" height="45px" /></span>
             {
               comment?
@@ -179,7 +225,7 @@ export const Comment=({vlog,index})=>{
   useEffect(()=>{
     setTimeout(() => {
     const formData=new FormData()
-    formData.append("post_id",index)
+    formData.append("post_id",vlog.post_id)
     const url=`https://friendslink.xyz/advocateshameem.me/post/readComments.php`
     fetch(url,{
       method:'POST',
@@ -195,6 +241,25 @@ export const Comment=({vlog,index})=>{
     })
   },1000)
   },)
+  const commentDelete=(commnetId)=>{
+    const formData=new FormData()
+    formData.append("cmt_id",commnetId)
+  const url=`https://friendslink.xyz/advocateshameem.me/post/deleteComment.php`
+  fetch(url,{
+    method:'POST',
+    body:formData,
+  })
+  .then(res=>{
+    if(res.status===200){
+   
+      res.json()
+      .then(result=>{
+        console.log('comment done',commnetId,result)
+      })
+    }
+  })
+  }
+  const email=localStorage.getItem('email')
   return(
     <section>
     <Container>
@@ -203,12 +268,13 @@ export const Comment=({vlog,index})=>{
      
          return(
           <Row>
-          <Col lg={vlog.images[0]?8:12} style={{marginBottom:"50px",marginTop:"20px"}}>
+          <Col lg={vlog.images[0]?8:12} style={{marginBottom:"5px",marginTop:"20px"}}>
           <div>
           <Card
           style={{width:'100%'}}
           className="mb-2"
         >
+       {email==="shameemsardar84@gmail.com"? <button onClick={()=>{commentDelete(comment.cmt_id)}}>Delete</button>:null}
           <Card.Header>
           <div style={{display:"flex"}}>
           <h4>{comment.username}</h4>
