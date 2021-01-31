@@ -98,13 +98,10 @@ const handleLike=(e)=>{
  if(vlog.is_liked=="0"){
   const newTotal=totalLike+1;
   setTotal(newTotal)
-   
  }
  else{
-
   const newTotal=totalLike-1;
   setTotal(newTotal)
-
  }
   
   const url=`https://friendslink.xyz/advocateshameem.me/post/updateLike.php`
@@ -124,7 +121,7 @@ const handleLike=(e)=>{
         })
       }
     })
-  
+    window.location.reload();
   }
 
 const handleDelete=()=>{
@@ -186,7 +183,7 @@ const handleDelete=()=>{
           
             <span style={{marginRight:"10px"}} onClick={()=>{
               setLike(!like)
-              handleLike()}}> {total} {vlog.is_liked=="1"||like?<img src={isLiked} alt="" width="35px" height="35px" />:<img src={likeLogo} alt="" width="35px" height="35px" />} </span>
+              handleLike()}}>{ total} {vlog.is_liked=="1"||like?<><img src={isLiked} alt="" width="35px" height="35px" /></>:<><img src={likeLogo} alt="" width="35px" height="35px" /></>} </span>
             <span onClick={()=>setComment(!comment)}> <img src={commentLogo} alt="" width="40px" height="45px" /></span>
             {
               comment?
